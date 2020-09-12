@@ -115,3 +115,4 @@ del %cppfile%
 
 ECHO.
 ECHO FILE %outfile% has been created
+move %outfile% %userprofile%\Desktop
