@@ -1,0 +1,37 @@
+\documentclass{article}
+\usepackage[margin=1.5cm,bottom=2cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\pagestyle{fancy}
+
+\begin{document}
+\fancyhead[L]{ \includegraphics[width=2cm]{au_logo.png} }
+\fancyhead[R]{CPSC 2320: Computational Physics}
+\fancyfoot[C]{\thepage}
+\vspace*{0cm}
+\begin{center}
+	{\LARGE \textbf{Homework 1}}\\
+	\vspace{0.25cm}
+	{\Large Due: Thursday, September 17}
+\end{center}
+
+You are a professor who wishes to know how your class performed on their recent exam. Write a C++ program that continually prompts the user to enter in a grade, and then print to the screen two quantities: the average (mean) of the grades, and the standard deviation of the grades.
+
+To find the mean of $N$ numbers, simply add them all and divide by $N$. To find the standard deviation of $N$ numbers, subtract each number from the mean and square this result. Find the mean of \textit{this} number, and then take the square root of that. For example: if this is our data set:
+
+\begin{table}[ht!]
+\begin{tabular}{c}
+	Grade\\
+	\hline
+	91\\
+	60\\
+	73\\
+	84\\
+\end{tabular}
+\end{table}
+
+The mean is: $\frac{91+60+73+84}{4}=77$. The standard deviation is: $\sqrt{\frac{(91-77)^2+(60-77)^2+(73-77)^2+(84-77)^2}{4}}=11.73$
+
+Write a program which loops indefinitely as the user inputs a grade between 0-100. If a value outside of this range is input, do not count the grade toward the final result, and print a message warning the user. When the user enters the value 999, stop collecting grades (do not count 999 as one of the grades!), calculate the mean and standard deviation, and print the results. 
+\end{document}

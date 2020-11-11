@@ -1,0 +1,62 @@
+\documentclass{article}
+\usepackage[margin=1.5cm,bottom=2cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\pagestyle{fancy}
+\usepackage[export]{adjustbox}
+\usepackage{xcolor}
+\hypersetup{colorlinks=true,urlcolor=blue,urlbordercolor=blue}
+\begin{document}
+\fancyhead[L]{ \includegraphics[width=2cm]{au_logo.png} }
+\fancyhead[R]{CPSC 2320: C++ Programming}
+\fancyfoot[C]{\thepage}
+\vspace*{0cm}
+\begin{center}
+	{\LARGE \textbf{Homework 3}}\\
+	\vspace{0.25cm}
+	{\Large Due: Friday, November 6}
+\end{center}
+
+\newcommand{\filename}{measurements.dat}
+\section*{String Parsing}
+\subsection*{Description}
+A coworker has recorded some measurements which you need. They send the file to you and you find it is terribly formatted!
+\\\\\texttt{(TIME, VALUE)\\
+(0.00, 0.73)\\
+(0.02, 5.97)\\
+(0.04, 2.47)\\
+etc...}
+
+You decide to reformat the file for them to make it easier to read the data. Your job in this homework is to read in the data from \filename{} and write it to a new file \texttt{measurements\_new.dat} in the following format:
+\\\\\texttt{TIME VALUE\\
+	0.00 0.73\\
+	0.02 5.97\\
+	0.04 2.47\\
+	etc...}
+
+Notice that the commas and parentheses have been removed.
+
+\subsection*{Procedure}
+\begin{enumerate}
+	\item Download the file \href{https://drive.google.com/file/d/1R6SKvNjw3gBTm9NVox_0aP4c2HqBlKcj/view?usp=sharing}{\filename} from Google Drive
+	\item Write two functions:
+	\begin{enumerate}
+		\item \texttt{double get\_time(string line)}
+		\item \texttt{double get\_value(string line)}
+	\end{enumerate}
+	\texttt{get\_time} accepts a line from the file as input, parses the string, and returns the first of the two numbers. \texttt{get\_value} accepts the same input and returns the second of the two numbers.
+	\item Before proceeding, write unit tests to ensure that you have coded these functions correctly
+	\item In \texttt{main}, do the following
+	\begin{enumerate}
+		\item Start by running your unit tests. Print a message indicating that the tests passed.
+		\item Open the file \filename{} (make sure to check if the file opens properly by using the \texttt{fail()} method)
+		\item Open the output file, \texttt{measurements\_new.dat}. Also check for \texttt{fail()}
+		\item Loop over the input file and use \texttt{getline} to read each line of the file into a string variable
+		\item Use your functions to parse the string into two doubles, and write these doubles to the output file in the specified format
+	\end{enumerate}
+	\item Upload both your cpp file and your output file to Canvas
+\end{enumerate}
+
+\end{document}

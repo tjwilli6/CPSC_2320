@@ -1,0 +1,221 @@
+/* Tanks!
+ * Sept 2017
+ * Jennifer Coy
+ * To emulate the math of a tank firing at a target in the game of Tanks!
+ */
+
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+#include <assert.h>             // for unit testing
+#include <cstdlib>              // some compilers need for srand()
+#include <ctime>                // some compilers need for time()
+#include "Test_check_hit_enemy.h"
+
+using namespace std;
+
+// function prototypes
+double rand_between(double min, double max);
+void test_rand_between();
+double get_double_input();
+bool check_hit_enemy(double my_x, double my_y, double enemy_x, double enemy_y, double velocity, double angle);
+bool check_hit_player();
+
+// game constants
+const int ODDS = 5;             // enemy will hit you 1 in ODDS times
+const double MY_X_MIN = 10;     // player is on left side
+const double MY_X_MAX = 30;     // see above
+const double ENEMY_X_MIN = 70;  // enemy is on right side
+const double ENEMY_X_MAX = 90;  // enemy is on right side
+const double Y_MIN = 10;        // everyone is minimum of 10 above bottom of screen
+const double Y_MAX = 80;        // no one is above 80% of the height
+const int INI_SHELL_NUM = 10; // you have this many shells
+const double MAX_ANGLE = 90;    // don't let them fire backwards
+const double MIN_VEL = 0;       // minimum velocity
+const double MAX_VEL = 100;      // maximum velocity, arbitrary units
+const double HIT_TOLERANCE = 5; // +-this of the enemy's position will count as a hit
+
+int main() {
+    string input = "";          // user's input string
+    double my_x = 0.0;          // user's tank's x position
+    double my_y = 0.0;          // user's tank's y position
+    double enemy_x = 0.0;       // enemy's tank's x position
+    double enemy_y = 0.0;       // enemy's tank's y position
+    int num_shell = 0;        // starting number of shells
+    bool you_win = false;       // did you win?
+    double angle = 0.0;         // angle to fire at
+    double velocity = 0.0;      // velocity (vector velocity, in the angle direction
+
+    // run unit tests
+    cout << "Running unit tests (remove before you sell this game!)." << endl;
+    test_rand_between();
+    test_check_hit_enemy();
+    cout << "Passed unit tests." << endl << endl << endl << endl << endl;
+
+    // from Example 12
+    // set the seed for the pseudorandom number generator
+    srand(static_cast<unsigned>(time(0)));
+
+    while (true) {
+
+        /////// Set up game ///////
+        // randomly choose x and y position for player's tank
+        my_x = rand_between(MY_X_MIN, MY_X_MAX);
+        my_y = rand_between(Y_MIN, Y_MAX);
+        // randomly choose x and y position for enemy tank
+        enemy_x = rand_between(ENEMY_X_MIN, ENEMY_X_MAX);
+        enemy_y = rand_between(Y_MIN, Y_MAX);
+        // tell user where each player is
+        cout << "Welcome to Text Tanks!" << endl;
+        cout << "Your position (x,y):  (" << setprecision(2) << fixed << my_x << ", "
+             << setprecision(2) << fixed << my_y << ")." << endl;
+        cout << "Enemy position (x,y): (" << setprecision(2) << fixed << enemy_x << ", "
+             << setprecision(2) << fixed << enemy_y << ")." << endl;
+        // reload shells
+        num_shell = INI_SHELL_NUM;
+
+        /////// Game loop ///////
+        while (num_shell > 0) {
+            cout << "You have " << num_shell << " shells remaining." << endl;
+
+            /////// Aim shell ///////
+            // prompt user for initial angle
+            cout << "Enter an angle between -" << MAX_ANGLE << " and " << MAX_ANGLE << " degrees: ";
+            angle = get_double_input();
+            if (fabs(angle) > MAX_ANGLE) {
+                cout << "You entered an illegal value for the angle.  Please try again." << endl;
+                continue; // go back to the beginning of this while loop
+            }
+
+            // prompt user for initial velocity
+            cout << "Enter a velocity between " << MIN_VEL << " and " << MAX_VEL << " tank units: ";
+            velocity = get_double_input();
+            if (velocity < MIN_VEL || velocity > MAX_VEL) {
+                cout << "You entered an illegal value for the velocity.  Please try again." << endl;
+                continue; // go back to the beginning of this while loop
+            }
+
+            // "fire" shell
+            num_shell--;
+
+            /////// Did we hit them? ///////
+            if (check_hit_enemy(my_x, my_y, enemy_x, enemy_y, velocity, angle) == true) {
+                cout << "That was a hit!!  You win!" << endl;
+                you_win = true;
+                break;  // exit this while loop
+                // note, we fire first, so if we hit them, they don't get a chance  to shoot back
+            } else {
+                cout << "That was a miss." << endl;
+            }
+
+            /////// Did they hit us? ///////
+            if (check_hit_player() == true) {
+                cout << "The enemy hit you!  You lose!!!!!!!!!!!!!!" << endl;
+                you_win = false;
+                break;
+            } else {
+                cout << "The enemy missed you." << endl;
+            }
+
+        }
+
+        /////// Report winner, and ask to play again? ///////
+        // report the winner
+        if (you_win) {
+            cout << "You won!  CONGRATULATIONS!!!" << endl;
+        } else {
+            cout << "You lose.  Sorry!" << endl;
+        }
+
+        // prompt user -- play again?
+        cout << "Press 'y' to play again, any other key to exit: ";
+        getline(cin, input);
+        if (input != "y") {
+            break;
+        } // otherwise, keep looping
+
+    }
+
+    // exit program
+    return 0;
+}
+
+
+// return a random number between min and max
+// srand() should have already been called
+double rand_between(double min, double max) {
+    return ((rand() % 100) / 100.0 * (max-min)+min);
+}
+
+
+// calculate the trajectory of the shell, from players position to enemy's position
+// and determine if it hits (close enough is given by HIT_TOLERANCE)
+// air resistance is ignored
+bool check_hit_enemy(double my_x, double my_y, double enemy_x, double enemy_y, double velocity, double angle) {
+    double vel_x0 = 0.0;                // initial velocity in the x direction
+    double vel_y0 = 0.0;                // initial velocity in the y direction
+    double angle_rad = 0.0;             // convert angle from degrees to radians
+    double time_at_enemy_x = 0.0;       // find the time when the shell reaches enemy_x location
+    double y_at_time = 0.0;             // find the y position at this time
+    const double G = -9.8;               // acceleration due to gravity
+
+    // need vel_x0 and vel_y0
+    angle_rad = angle * 2 * M_PI / 360; // convert to radians
+    vel_x0 = velocity * cos(angle_rad);
+    vel_y0 = velocity * sin(angle_rad);
+
+    // then figure out time when we reach the x position
+    time_at_enemy_x = (enemy_x - my_x) / (vel_x0);
+    y_at_time = my_y + vel_y0 * time_at_enemy_x + 0.5 * G * time_at_enemy_x * time_at_enemy_x;
+
+    // did we hit it?
+    if (fabs(y_at_time - enemy_y) < HIT_TOLERANCE) {
+        return true;
+    } else {
+        cout << "Your y-position was off by " << (y_at_time - enemy_y) << endl;
+        return false;
+    }
+}
+
+
+// "check" if the enemy hits the player
+// in reality, generate a random number, and 1 in ODDS times, the enemy will win
+bool check_hit_player() {
+    // pick a number between 0 and 9, and if it happens to be 2, return true
+    int ans = rand_between(0, ODDS);
+
+    // see if the were hit
+    if (ans == 1) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+
+// read a double from the user, using getline, continuing to prompt until
+// they enter something valid, then return
+double get_double_input() {
+    string line = "";        // user input
+    double num = 0.0;        // the floating point number entered
+
+    while (true) {
+        // we have already prompted the user, read in the data
+        getline(cin, line);
+
+        // convert from string to integer
+        try {
+            num = stod(line);
+            // if they entered something that can be converted, break from the loop
+            break;
+        } catch (exception &e) {
+            // if they entered something like a letter, print an error, and prompt them again
+            cout << "Error.  You did not enter a floating point number." << endl;
+            cout << e.what() << endl;
+        }
+    }
+
+    // return the result
+    return num;
+}

@@ -1,0 +1,31 @@
+\documentclass{article}
+\usepackage[margin=1.5cm,bottom=2cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[export]{adjustbox}
+\pagestyle{fancy}
+
+\hypersetup{colorlinks=true,urlcolor=blue,urlbordercolor=blue}
+
+\begin{document}
+\fancyhead[L]{ \includegraphics[width=2cm]{au_logo.png} }
+\fancyhead[R]{CPSC 2320: Computational Physics}
+\fancyfoot[C]{\thepage}
+\vspace*{0cm}
+\begin{center}
+	{\LARGE \textbf{Lab 5}}\\
+	\vspace{0.25cm}
+	{\Large Due: Wednesday, November 4}
+\end{center}
+
+\section{Coordinate Conversion}
+Download the file ``\href{https://drive.google.com/file/d/157-9-Smc-iNxmKykxQCZZWctQsxaUfLu/view?usp=sharing}{polar.dat}'' from Google Drive. Even though it has the extension ``.dat'' it is just a text file so you should be able to open it. The file has the format:\\
+\texttt{RADIUS\quad ANGLE\\ radius1\quad angle1\\ radius2\quad angle2\\etc...}
+
+Write a C++ program to read both columns into vectors, convert into Cartesian coordinates, and then write the results to the file ``cart.dat'' which has the format:\\
+\texttt{X\quad Y\\ x1\quad y1\\ x2\quad y2\\etc...}. 
+\\Turn in both the cpp file and the text file to Canvas.
+\end{document}

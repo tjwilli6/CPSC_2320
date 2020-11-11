@@ -1,0 +1,62 @@
+\documentclass{article}
+\usepackage[margin=1.5cm,bottom=2cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[export]{adjustbox}
+\pagestyle{fancy}
+
+\hypersetup{colorlinks=true,urlcolor=blue,urlbordercolor=blue}
+
+\begin{document}
+\fancyhead[L]{ \includegraphics[width=2cm]{au_logo.png} }
+\fancyhead[R]{CPSC 2320: Computational Physics}
+\fancyfoot[C]{\thepage}
+\vspace*{0cm}
+\begin{center}
+	{\LARGE \textbf{Lab 4}}\\
+	\vspace{0.25cm}
+	{\Large Due: Tuesday, October 27}
+\end{center}
+
+\section{Vectors}
+Repeat the ``Grades'' problem (\href{https://drive.google.com/file/d/1SSxhoP7yIXVp6Xddpqny51gzah2msQGJ/view?usp=sharing}{homework 1}) using a vector to store the grades. All the basic requirements are the same:
+\begin{itemize}
+	\item User enters grades continuously (until they enter 999)
+	\item Grades must be in the range [0,100]
+	\item Print both the average \textit{and the standard deviation} (Refer to the instructions in homework 1 for the standard deviation calculation)
+\end{itemize}
+
+\section{Unit Testing}
+Turn your quadratic formula code from \href{https://drive.google.com/file/d/1qfXRyeUBVmXkNnpzuuMdZz6LJFereyQm/view?usp=sharing}{lab 1, part 1} into a function that accepts the three quadratic coefficients $a, b, $ and $c$ (all doubles). Do not prompt the user for these values, just write a function that accepts them as inputs. There should be no ``cin'' statements anywhere in your program.
+
+Note that in general a quadratic equation will have two solutions. In order to ``return'' these two solutions from our function, we pass two additional {\tt{double}} variables by reference and set their values within the function. To handle cases with no solution, define a global variable: { \tt const double NO\_SOLUTION = -9999; }
+
+Your function should handle the cases described in the lab.
+\begin{itemize}
+	\item If the solution is complex, $x_1=x_2=$ {\tt NO\_SOLUTION}
+	\item If $a\neq0$, $x_1$ and $x_2$ are the two solutions of the quadratic formula
+	\item If $a=0$, $x_1=-\frac{c}{b}$, $x_2=$ {\tt NO\_SOLUTION}
+\end{itemize}
+Now write a unit test to make sure your function works as expected. Make sure you test it for all the different possibilities:
+\begin{itemize}
+	\item At least one test where $a=0$
+	\item At least one test where $\sqrt{b^2-4ac}<0$
+	\item At least one test where $\sqrt{b^2-4ac}>0$
+	\item At least one test where $\sqrt{b^2-4ac}=0$
+\end{itemize}
+Run the unit test function from {\tt{main}}
+
+\subsection*{Useful information: Equality comparison with doubles}
+The following information will be helpful when completing part 2 of the lab.
+
+Keep in mind that exact equality comparison with doubles is difficult, due to the limited precision of a computer representation of a double. Therefore, the better way to determine if two doubles are equal is to test whether their absolute difference is sufficiently small:
+\begin{equation*}
+	|x_1-x_2|\leq \epsilon
+\end{equation*}
+Where $\epsilon$ is small compared to both $x_1$ and $x_2$.
+
+You can implement this in your code in any way you like. One way is to write a new function:\\ {\tt bool are\_equal(double num1, double num2) } which performs the above calculation (you can declare a global variable {\tt const double EPSILON = 1e-5}, or some other very small number, to use for the equality test) and then use this function for your unit tests.
+\end{document}

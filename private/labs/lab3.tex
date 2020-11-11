@@ -1,0 +1,47 @@
+\documentclass{article}
+\usepackage[margin=1.5cm,bottom=2cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[export]{adjustbox}
+\pagestyle{fancy}
+
+\begin{document}
+\fancyhead[L]{ \includegraphics[width=2cm]{au_logo.png} }
+\fancyhead[R]{CPSC 2320: Computational Physics}
+\fancyfoot[C]{\thepage}
+\vspace*{0cm}
+\begin{center}
+	{\LARGE \textbf{Lab 3}}\\
+	\vspace{0.25cm}
+	{\Large Due: Tuesday, September 29}
+\end{center}
+
+\section*{The Fibonacci Sequence}
+Write a C++ program to calculate the first 40 numbers in the Fibonacci sequence. The sequence is defined so that each term in the sequence is the sum of the previous two. If we start with 1,1, then the sequence looks like:
+\begin{equation*}
+1, 1, 2, 3, 5, 8, 13, 21, 34, ...
+\end{equation*}
+Mathematically: we write 
+\begin{equation*}
+f_i = f_{i-1} + f_{i-2}
+\end{equation*}
+
+Write a C++ program which does the following:
+
+\begin{enumerate}
+\item Create an array large enough to hold all the Fibonacci numbers. 
+\item Set the value of the first two array elements to 1. 
+\item Write a function which receives the array as an argument and fills it with the Fibonacci sequence (starting with the third element) and call this function from main
+\item In main, use the final two elements of the array to estimate the so-called ``golden ratio''\\
+{\color{blue} (\href{https://en.wikipedia.org/wiki/Golden_ratio}{https://en.wikipedia.org/wiki/Golden\_ratio})
+}
+\begin{equation*}
+\phi = \frac{f_N}{f_{N-1}}
+\end{equation*}
+And print this value to the console.
+\end{enumerate}
+
+\end{document}
