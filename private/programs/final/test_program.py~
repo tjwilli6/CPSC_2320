@@ -1,0 +1,28 @@
+#! /usr/bin/env python3
+
+import subprocess as sub
+import sys
+import random
+
+executable = "./montyhall"
+N = 10000
+
+p = sub.Popen(
+    [executable],
+    stdin=sub.PIPE,
+    stdout=sys.stdout,
+    universal_newlines=True
+)
+
+for i in range(N):
+    choosedoor = random.randint(1,3)
+    print("{}\n".format(choosedoor),file=p.stdin,flush=True)
+    switch = random.randint(0,1)
+    inp = "n\n"
+    if switch:
+        inp = "y\n"
+    print(inp,file=p.stdin,flush=True)
+    if i < N-1:
+        print("y\n",file=p.stdin,flush=True)
+    else:
+        print("n\n",file=p.stdin,flush=True)

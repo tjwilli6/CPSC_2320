@@ -1,0 +1,13 @@
+This is a configuration file for an RC circuit
+
+Enter the resistance, in Ohms, here
+RESISTANCE 1000
+* RESISTANCE 100
+
+The capacitance in Farads
+* CAPACITANCE 1E-3
+
+Parameters for the time range
+Format: TIMERANGE tstart tstop dt
+
+* TIMERANGE 0 10 0.01

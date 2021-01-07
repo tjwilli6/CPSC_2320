@@ -1,0 +1,139 @@
+#include <iostream>
+#include <fstream>
+#include <cmath>
+#include <string>
+
+using namespace std;
+
+double get_value(string keyword,string line);
+
+bool read_cfg(string fname,
+		double & emf,double &R, double &C,
+		double &tstart,double& tstop, double & dt);
+
+int main()
+{
+	string fnameIn;
+	string fnameOut = "rc_data.csv";
+	ofstream outFile;
+	double R,C;
+	double emf;
+	double tstart,tstop,dt;
+	double I;
+
+	//cout << "Please provide the location of the config file: ";
+	//getline(cin,fnameIn);
+	fnameIn = "config.txt";
+
+	if (!read_cfg(fnameIn,emf,R,C,tstart,tstop,dt))
+	{
+		cout << "Could not open file " << fnameIn;
+		return 0;
+	}
+
+	outFile.open(fnameOut);
+
+	outFile << "TIME, CURRENT" << endl;
+	for(double t=tstart; t <= tstop; t+=dt)
+	{
+		I = emf / R * exp( -t / R / C);
+		outFile << t << ", " << I << endl;
+	}
+	outFile.close();
+	cout << "Wrote data to file " << fnameOut << endl;
+	return 0;
+}
+
+double get_value(string keyword,string line)
+{
+	int start_pos = line.find(keyword) + keyword.size();
+	int len = line.size() - keyword.size();
+	string temp = line.substr(start_pos,len);
+	return stod(temp);
+}
+
+void get_timerange(string line, double& tstart, double& tstop, double& dt)
+{
+	string keyword = "TIMERANGE";
+	int start_pos = line.find(keyword) + keyword.size() + 1;
+	int cur_pos = start_pos;
+	string str_start = "";
+	string str_stop = "";
+	string str_step = "";
+	while (line[cur_pos] != ' ')
+	{
+		str_start += line[cur_pos];
+		cur_pos++;
+	}
+
+	cur_pos++;
+	while (line[cur_pos] != ' ')
+	{
+		str_stop += line[cur_pos];
+		cur_pos++;
+	}
+
+	cur_pos++;
+	while (line[cur_pos] != ' ')
+	{
+		str_step += line[cur_pos];
+		cur_pos++;
+		if( cur_pos >= line.size() )
+		{
+	                break;
+		}
+	}
+
+	tstart = stod(str_start);
+	tstop = stod(str_stop);
+	dt = stod(str_step);
+}
+bool read_cfg(string fname,
+		double & emf,double &R, double &C,
+		double &tstart,double& tstop, double & dt)
+{
+	string line;
+	string keyword;
+	ifstream inFile;
+	inFile.open(fname);
+	if ( inFile.fail() )
+	{
+		return false;
+	}
+
+	while (!inFile.eof() )
+	{
+		getline(inFile,line);
+		if (line.find("*") > line.size())
+		{
+			continue;
+		}
+
+		keyword = "RESISTANCE";
+		if (line.find(keyword) < line.size())
+		{
+			R = get_value(keyword,line);
+			cout << "Setting value for " << keyword << ": " << R << endl;
+		}
+		keyword = "CAPACITANCE";
+		if (line.find(keyword) < line.size())
+		{
+			C = get_value(keyword,line);
+			cout << "Setting value for " << keyword << ": " << C << endl;
+		}
+		keyword = "EMF";
+		if (line.find(keyword) < line.size())
+		{
+			emf = get_value(keyword,line);
+			cout << "Setting value for " << keyword << ": " << emf << endl;
+		}
+		keyword = "TIMERANGE";
+		if (line.find(keyword) < line.size())
+		{
+			get_timerange(line,tstart,tstop,dt);
+			cout << "Setting values for timerange: " << tstart << " " << tstop << " " << dt << endl;
+		}
+	}
+	inFile.close();
+	return true;
+}

@@ -1,0 +1,67 @@
+\documentclass{article}
+\usepackage[margin=1.5cm,bottom=2cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\pagestyle{fancy}
+\usepackage[export]{adjustbox}
+\usepackage{xcolor}
+\hypersetup{colorlinks=true,urlcolor=blue,urlbordercolor=blue}
+\begin{document}
+\fancyhead[L]{ \includegraphics[width=2cm]{au_logo.png} }
+\fancyhead[R]{CPSC 2320: C++ Programming}
+\fancyfoot[C]{\thepage}
+\vspace*{0cm}
+\begin{center}
+	{\LARGE \textbf{Homework 4}}\\
+	\vspace{0.25cm}
+	{\Large Due: Thursday, November 19}\\
+	\vspace{0.25cm}
+	{\Large \textbf{The $RC$ circuit}}
+\end{center}
+
+\section*{Overview}
+For this homework, you will be writing a C++ program to calculate the current as a function of time for an $RC$ circuit (a circuit with a resistor and a capacitor in series) and writing these values to a file.
+
+For an $RC$ circuit, the current as a function of time looks like:
+\begin{equation}
+	I(t) = \frac{\varepsilon}{R}e^{-\frac{t}{RC}}
+\end{equation}
+Where $\varepsilon$ is the emf of the power supply, and $R$ and $C$ are respectively the resistance and capacitance of the circuit elements.
+
+You will read the necessary parameters ($\varepsilon$, $R$, and $t$) from a file.
+
+
+\section*{Details}
+You will need to declare variables for $R$, $\varepsilon$, and $C$. The time range will be specified by three numbers: $t_\mathrm{start}$, $t_\mathrm{stop}$, and $\Delta t$ (i.e: you will calculate $I(t)$ for each of $t_\mathrm{start}$, $t_\mathrm{start}$ + $\Delta t$, $t_\mathrm{start}$ + 2$\Delta t$, $t_\mathrm{start}$ + 3$\Delta t$ . . . $t_\mathrm{stop}$.
+
+\subsection*{Configuration File}
+These numbers will be read from a configuration file with the following form:\\
+\null\\
+\texttt{* EMF 3.0}\\
+\texttt{* RESISTANCE 100}\\
+\texttt{* CAPACITANCE 1E-4}\\
+\texttt{* TIMERANGE 0 10 0.01}
+
+\vspace{.25cm}
+Some things to note about the file format:
+\begin{itemize}
+	\item EMF, resistance and capacitance are specified by the keyword RESISTANCE and CAPACITANCE. They are followed by a space and then a number.
+	\item All three values for the time range are specified by the TIMERANGE keyword, with the format \\TIMERANGE $t_\mathrm{start}\ t_\mathrm{stop}\ \Delta t$, separated by spaces.
+	\item Only lines beginning with a ``*'' should be parsed. There may be other lines in the file, but if they do not start with ``*'', they should be treated as comments and skipped.
+\end{itemize}
+An example config file is on google drive \href{https://drive.google.com/file/d/1Iq_2yEz7YJZW8hYocog5oiAdUJANSY9n/view?usp=sharing}{here}
+Using these values, you will calculate $I(t)$ and write each value to a file as comma separated values (CSV format):
+\null\\\\
+\texttt{TIME CURRENT}\\
+\texttt{0.00, 4.00}\\
+\texttt{0.01, 3.89}\\
+\texttt{0.02, 3.64}\\
+\texttt{...}\\
+
+\section*{Specifications}
+To start off the program, you will prompt the user to enter the name of the configuration file. If the file exists and you are able to open it, then read the values, perform the calculation, and write the data to a new file. If you cannot open or read the configuration file, print a message to the user and don't do anything else.
+
+You should write a function to handle the reading of the configuration file. This function will receive as input the name of the file, and will read the file and assign the appropriate values to your variables for $R$, $C$, $t_\mathrm{start},\ t_\mathrm{stop}$, and $\Delta t$. Write another function to perform the current calculation.
+\end{document}

@@ -1,0 +1,89 @@
+\documentclass{article}
+\usepackage[margin=1.5cm,bottom=2cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\pagestyle{fancy}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,urlcolor=blue,urlbordercolor=blue}
+
+\begin{document}
+\fancyhead[L]{ \includegraphics[width=2cm]{au_logo.png} }
+\fancyhead[R]{CPSC 2320: C++ Programming}
+\fancyfoot[C]{\thepage}
+\vspace*{0cm}
+\begin{center}
+	{\LARGE \textbf{Final Project}}\\
+	\vspace{0.25cm}
+	{\Large Due: Thursday, December 17}
+\end{center}
+
+\section*{Introduction}
+The  \href{https://en.wikipedia.org/wiki/Monty_Hall_problem}{``Monty Hall Problem''} is a famous brain teaser based on the TV show \textit{Let's Make a Deal}. The problem is posed like this:
+\begin{quotation}
+	Suppose you're on a game show, and you're given the choice of three doors: Behind one door is a car; behind the others, goats. You pick a door, say No. 1, and the host, who knows what's behind the doors, opens another door, say No. 3, which has a goat. He then says to you, "Do you want to pick door No. 2?" Is it to your advantage to switch your choice?
+\end{quotation}
+You can find an online simulation \href{https://www.mathwarehouse.com/monty-hall-simulation-online/}{here} to get a feel for how the game works.
+
+As it turns out, you have a 2 in 3 chance of winning if you switch to the other door, and only a 1 in 3 chance if you stay with your original choice. This seems rather unintuitive, so you will write a program to allow the user to play a text-based version of the game from a command prompt.
+
+\section*{Overview}
+You will write a C++ program to play the Monty Hall game and keep track of the player's win statistics. The basic flow of the program is:
+\begin{enumerate}
+	\item Randomly select one of the three doors to be the winning door (do not show this door to the player).
+	\item Prompt the user to select one of the three doors.
+	\item Now, randomly remove one of the doors. You cannot remove the door that the user has picked, or the winning door. Note that it is possible that the player chose the winning door on the first try, although they do not know it yet.
+	\item Now, ask the player if they would like to stay with their current choice, or switch to the other door.
+	\item After the player has made their choice, reveal whether or not the player has chosen correctly (whether the player won or lost). 
+	\item Give the player the option to play again, in which case you reset the game and jump back to step 1.
+	\item Your program should keep track of the win statistics of the player. Specifically, after each round, the program should print two win percentages: the win percentage when the player chooses to stay with their original choice, and the win percentage when the player opts to switch to the other door.
+\end{enumerate}
+
+\section*{Gameplay Examples}
+\texttt{Choose a door (1,2,3)\\
+	2\\
+	The host has removed door \#1\\
+	Do you want to switch to door \#3? (y/n)\\
+	y\\
+	You lost...\\
+	Win percentage when you stay: N/A\\
+	Win percentage when you switch: 0\%\\
+	Keep playing? (y/n)\\
+	y\\
+	Choose a door (1,2,3)\\
+	1\\
+	The host has removed door \#3\\
+	Do you want to switch to door \#2? (y/n)\\
+	n\\
+	You lost...\\
+	Win percentage when you stay: 0\%\\
+	Win percentage when you switch: 0\%\\
+	Keep playing? (y/n)\\
+	y\\
+	Choose a door (1,2,3)\\
+	2\\
+	The host has removed door \#1\\
+	Do you want to switch to door \#3? (y/n)\\
+	y\\
+	You win!\\
+	Win percentage when you stay: 0\%\\
+	Win percentage when you switch: 50\%\\
+	Keep playing? (y/n)\\
+	y\\
+	Choose a door (1,2,3)\\
+	4\\
+	Please choose either 1, 2, or 3\\
+	0\\
+	Please choose either 1, 2, or 3\\
+	1\\
+	The host has removed door \#3\\
+	Do you want to switch to door \#2? (y/n)\\
+	y\\
+	You lost...\\
+	Win percentage when you stay: 0\%\\
+	Win percentage when you switch: 33.3\%\\
+	Keep playing? (y/n)\\
+	n
+}
+\end{document}

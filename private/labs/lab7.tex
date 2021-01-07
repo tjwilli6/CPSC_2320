@@ -1,0 +1,49 @@
+\documentclass{article}
+\usepackage[margin=1.5cm,bottom=2cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[export]{adjustbox}
+\pagestyle{fancy}
+
+\hypersetup{colorlinks=true,urlcolor=blue,urlbordercolor=blue}
+
+\begin{document}
+\fancyhead[L]{ \includegraphics[width=2cm]{au_logo.png} }
+\fancyhead[R]{CPSC 2320: C++ Programming}
+\fancyfoot[C]{\thepage}
+\vspace*{0cm}
+\begin{center}
+	{\LARGE \textbf{Lab 7}}\\
+	\vspace{0.25cm}
+	{\Large Due: Tuesday, November 24}
+\end{center}
+
+\section{Implementing User-defined types}
+Download the \texttt{CartesianVector} class (\href{https://drive.google.com/file/d/1kgaPRark_O-LV8gCDP4g88czcgZm4rvj/view?usp=sharing}{here}). Write a program which prompts the user for three numbers $x,y$ and $z$. Use an instance of the \texttt{CartesianVector} class to convert this vector to spherical coordinates, and print the result to the user.
+\section{Extending Class Functionality}
+Add a member function called \texttt{toCylindrical()} to the \texttt{CartesianVector} class which converts the cartesian vector to \textit{cylindrical} coordinates:
+\begin{align*}
+	\rho &= \sqrt{x^2+y^2}\\
+	\phi &= \arctan(y/x)\\
+	z&=z
+\end{align*}
+\section{Write your own class}
+Write a class to model an $RC$ circuit.
+The class should include the following member variables:
+\begin{itemize}
+	\item emf
+	\item capacitance
+	\item resistance
+\end{itemize}
+And should include the following member functions:
+\begin{itemize}
+	\item Include a constructor so that the values of the three member variables can be passed upon object creation
+	\item \texttt{double getTimeConstant()} calculate the time constant (resistance $\times$ capacitance) and return it as a double
+	\item \texttt{double getCurrent(double t)} calculate the current given a time value, using the relationship $I(t)=\frac{\varepsilon}{R}e^{-t/RC}$
+	\item \texttt{double getCapacitorCharge(double t)} calculate the charge on the capacitor given an time value \\($Q(t)=C\varepsilon\left(1-e^{-t/RC}\right)$ )
+\end{itemize}
+
+\end{document}
